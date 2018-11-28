@@ -1,0 +1,32 @@
+#endpoint: ${env:PRISMA_ENDPOINT}
+endpoint: https://us1.prisma.sh/greg-smith-72db79/backend-auth-test-1/dev
+datamodel:
+  - database/types.graphql
+  - database/enums.graphql
+
+secret: ${env:PRISMA_SECRET}
+
+# generate:
+#     - generator: javascript-client
+#       output: ./generated/prisma
+#     - generator: graphql-schema
+#       output: ./generated/prisma
+
+# Specifies the language and directory for the generated Prisma client.
+generate:
+  - generator: typescript-client
+    output: src/generated/prisma-client/
+  - generator: graphql-schema
+    output: src/generated/prisma
+
+hooks:
+  post-deploy:
+    - prisma generate
+      # - graphql get-schema -p prisma
+
+
+# endpoint: https://us1.prisma.sh/greg-smith-72db79/backend-auth-test-1/dev
+# datamodel: datamodel.prisma
+# hooks:
+#   post-deploy:
+#       - graphql get-schema -p prisma
