@@ -106,8 +106,8 @@ export type UserOrderByInput =
   | "email_DESC"
   | "emailVerified_ASC"
   | "emailVerified_DESC"
-  | "auth0Id_ASC"
-  | "auth0Id_DESC"
+  | "firebaseId_ASC"
+  | "firebaseId_DESC"
   | "role_ASC"
   | "role_DESC"
   | "name_ASC"
@@ -126,7 +126,7 @@ export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 export interface UserCreateInput {
   email?: String;
   emailVerified?: Boolean;
-  auth0Id?: String;
+  firebaseId?: String;
   role?: Role;
   name?: String;
   avatar?: String;
@@ -135,7 +135,7 @@ export interface UserCreateInput {
 export interface UserUpdateInput {
   email?: String;
   emailVerified?: Boolean;
-  auth0Id?: String;
+  firebaseId?: String;
   role?: Role;
   name?: String;
   avatar?: String;
@@ -172,20 +172,20 @@ export interface UserWhereInput {
   email_not_ends_with?: String;
   emailVerified?: Boolean;
   emailVerified_not?: Boolean;
-  auth0Id?: String;
-  auth0Id_not?: String;
-  auth0Id_in?: String[] | String;
-  auth0Id_not_in?: String[] | String;
-  auth0Id_lt?: String;
-  auth0Id_lte?: String;
-  auth0Id_gt?: String;
-  auth0Id_gte?: String;
-  auth0Id_contains?: String;
-  auth0Id_not_contains?: String;
-  auth0Id_starts_with?: String;
-  auth0Id_not_starts_with?: String;
-  auth0Id_ends_with?: String;
-  auth0Id_not_ends_with?: String;
+  firebaseId?: String;
+  firebaseId_not?: String;
+  firebaseId_in?: String[] | String;
+  firebaseId_not_in?: String[] | String;
+  firebaseId_lt?: String;
+  firebaseId_lte?: String;
+  firebaseId_gt?: String;
+  firebaseId_gte?: String;
+  firebaseId_contains?: String;
+  firebaseId_not_contains?: String;
+  firebaseId_starts_with?: String;
+  firebaseId_not_starts_with?: String;
+  firebaseId_ends_with?: String;
+  firebaseId_not_ends_with?: String;
   role?: Role;
   role_not?: Role;
   role_in?: Role[] | Role;
@@ -226,7 +226,7 @@ export interface UserWhereInput {
 export interface UserUpdateManyMutationInput {
   email?: String;
   emailVerified?: Boolean;
-  auth0Id?: String;
+  firebaseId?: String;
   role?: Role;
   name?: String;
   avatar?: String;
@@ -245,7 +245,7 @@ export interface UserSubscriptionWhereInput {
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
-  auth0Id?: String;
+  firebaseId?: String;
 }>;
 
 export interface NodeNode {
@@ -288,7 +288,7 @@ export interface UserPreviousValues {
   id: ID_Output;
   email?: String;
   emailVerified?: Boolean;
-  auth0Id?: String;
+  firebaseId?: String;
   role?: Role;
   name?: String;
   avatar?: String;
@@ -300,7 +300,7 @@ export interface UserPreviousValuesPromise
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
   emailVerified: () => Promise<Boolean>;
-  auth0Id: () => Promise<String>;
+  firebaseId: () => Promise<String>;
   role: () => Promise<Role>;
   name: () => Promise<String>;
   avatar: () => Promise<String>;
@@ -312,7 +312,7 @@ export interface UserPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
   emailVerified: () => Promise<AsyncIterator<Boolean>>;
-  auth0Id: () => Promise<AsyncIterator<String>>;
+  firebaseId: () => Promise<AsyncIterator<String>>;
   role: () => Promise<AsyncIterator<Role>>;
   name: () => Promise<AsyncIterator<String>>;
   avatar: () => Promise<AsyncIterator<String>>;
@@ -345,7 +345,7 @@ export interface User {
   id: ID_Output;
   email?: String;
   emailVerified?: Boolean;
-  auth0Id?: String;
+  firebaseId?: String;
   role?: Role;
   name?: String;
   avatar?: String;
@@ -355,7 +355,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
   emailVerified: () => Promise<Boolean>;
-  auth0Id: () => Promise<String>;
+  firebaseId: () => Promise<String>;
   role: () => Promise<Role>;
   name: () => Promise<String>;
   avatar: () => Promise<String>;
@@ -367,7 +367,7 @@ export interface UserSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
   emailVerified: () => Promise<AsyncIterator<Boolean>>;
-  auth0Id: () => Promise<AsyncIterator<String>>;
+  firebaseId: () => Promise<AsyncIterator<String>>;
   role: () => Promise<AsyncIterator<Role>>;
   name: () => Promise<AsyncIterator<String>>;
   avatar: () => Promise<AsyncIterator<String>>;

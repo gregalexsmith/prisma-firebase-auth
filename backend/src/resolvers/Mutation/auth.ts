@@ -1,82 +1,52 @@
 import { Context } from '../../context';
-import * as jwksClient from 'jwks-rsa';
-import * as jwt from 'jsonwebtoken';
-
-const jwks = jwksClient({
-  cache: true,
-  rateLimit: true,
-  jwksRequestsPerMinute: 1,
-  jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
-});
-
-const parseIdToken = idToken =>
-  new Promise((resolve, reject) => {
-    // @ts-ignore
-    const { header, payload } = jwt.decode(idToken, { complete: true });
-    if (!header || !header.kid || !payload) {
-      reject(new Error('Invalid token.'));
-    }
-    jwks.getSigningKey(header.kid, (fetchError, key) => {
-      if (fetchError) {
-        reject(new Error('Error getting signing key: ' + fetchError.message));
-      }
-      return jwt.verify(
-        idToken,
-        key.publicKey,
-        { algorithms: ['RS256'] },
-        (verificationError, decoded) => {
-          if (verificationError) {
-            reject('Verification error: ' + verificationError.message);
-          }
-          resolve(decoded);
-        }
-      );
-    });
-  });
+import app from '../../firebaseAdmin';
+import { auth as authTypes } from 'firebase-admin';
 
 export const auth = {
 
   async signUp(parent, { idToken }, ctx: Context, info) {
-    let token = null;
+    let token : authTypes.DecodedIdToken = null;
     try {
-      token = await parseIdToken(idToken);
+      token = await app.auth().verifyIdToken(idToken);
     } catch (err) {
-      console.error(err);
       throw new Error(err.message);
     }
-    const auth0Id = token.sub;
-    const user = await ctx.db.user({ auth0Id });
+    const firebaseId = token.uid;
+    const user = await ctx.db.user({ 
+      firebaseId
+    });
+    
     if (user) {
       // Just in case this user is logging in just after verifying their email:
       if (user.emailVerified !== token.email_verified) {
-        return ctx.db.updateUser({ where: { auth0Id }, data: { emailVerified: token.email_verified } });
+        return ctx.db.updateUser({ where: { firebaseId }, data: { emailVerified: token.email_verified } });
       }
       return user;
     }
     return ctx.db.createUser({
         email: token.email,
         emailVerified: token.email_verified,
-        auth0Id: token.sub,
+        firebaseId: token.uid,
         name: token.name,
         avatar: token.picture
     });
   },
 
   async verifyEmail(parent, { idToken }, ctx: Context, info) {
-    let token = null;
+    let token : authTypes.DecodedIdToken = null;
     try {
-      token = await parseIdToken(idToken);
+      token = await app.auth().verifyIdToken(idToken);
     } catch (err) {
       console.error(err);
       throw new Error(err.message);
     }
-    if (ctx.request.user.auth0Id !== token.sub) {
-      console.error(`Request user identity (${ctx.request.user.auth0Id}) does not match ID Token sub (${token.sub})`);
+    if (ctx.request.user.firebaseId !== token.uid) {
+      console.error(`Request user identity (${ctx.request.user.firebaseId}) does not match ID Token uid (${token.uid})`);
       throw new Error('Error matching user identity.');
     }
     return ctx.db.updateUser({
       data: { emailVerified: token.email_verified },
-      where: { auth0Id: token.sub } 
+      where: { firebaseId: token.uid }
     });
   },
 

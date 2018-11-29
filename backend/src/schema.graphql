@@ -1,4 +1,4 @@
-# import User from "./generated/prisma.graphql"
+# import User from "./generated/prisma/prisma.graphql"
 
 directive @isAuthenticated(checkIfEmailIsVerified: Boolean = true) on FIELD_DEFINITION
 
