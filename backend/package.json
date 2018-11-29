@@ -1,6 +1,10 @@
 {
-  "name": "prisma-graphql-auth-test",
+  "name": "prisma-graphql-yoga-firebase-auth",
   "description": "testing stuff",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/gregalexsmith/prisma-firebase-auth"
+  },
   "scripts": {
     "start": "dotenv -- nodemon -e ts,graphql -x ts-node src/index.ts",
     "dev": "dotenv -- nodemon -e js,graphql -x ts-node --inspect src/index.js",
@@ -16,15 +20,6 @@
     "graphql-yoga": "^1.16.7",
     "prisma-client-lib": "^1.21.1"
   },
-  "license": "MIT",
-  "repository": {
-    "url": ""
-  },
-  "babel": {
-    "presets": [
-      "env"
-    ]
-  },
   "devDependencies": {
     "@types/jest": "^23.3.10",
     "firebase": "^5.5.9",
@@ -33,5 +28,10 @@
     "ts-jest": "^23.10.5",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.6"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
   }
 }
